@@ -28,19 +28,25 @@ class Search extends React.Component{
  	searchUser: ''
  }
  onChange = (event)=>{
- 	this.setState({searchUser:event.target.value})
+ 	this.setState({searchUser:event.target.value.toLowerCase()})
  }
 
  onButtonSubmit = ()=>{
- 	console.log("search",this.state.searchUser)
  	this.props.searchTerm(this.state.searchUser)
+ }
+
+ keyCheck = (e)=>{
+ 	console.log("key",e.keyCode)
+ 	if (e.keyCode === 13){
+ 		this.onButtonSubmit();
+ 	}
  }
 
 	render(){
 	return (
 		<div>
 			<main>
-				<input type="text" className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" onChange={this.onChange} name="name" placeholder="search Users..."/>
+				<input type="text" className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" onChange={this.onChange} onKeyUp={this.keyCheck} name="name" placeholder="search Users..."/>
 				<Link to="/search">
 				<input type="submit" className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" onClick={this.onButtonSubmit} value="search"/>
 				</Link>

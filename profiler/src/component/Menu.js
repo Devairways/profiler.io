@@ -2,16 +2,23 @@ import React from "react";
 import Search from "./Search";
 import { Link, Redirect} from "react-router-dom";
 
+
+// const deleteAuthTokenInSessions = () => {
+//     window.sessionStorage.removeItem('token');
+//     }
+
 const Menu = (props) =>{
-	const {authed,searchTerm, login} = props;
+	const {authed, searchTerm, login} = props;
+
+
 
 	return (
 		<div style={getStyle()}>
-	       <Search searchTerm={searchTerm}/>
+	       <Search />
 	       <Link to="/profile">
-	       	<button className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">{authed ? "profile" : "Log in"}</button>
-	       	</Link>
-	       	{authed ? <Link onClick={()=>{login()}} to="/"><input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit"  value="Log out"/></Link>: ""}
+	       <button className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">{authed ? "profile" : "Log in"}</button>
+	       </Link>
+	       	{authed ? <Link onClick={()=>{login()}} to="/"><input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit"  value="Log out" /></Link>: ""}
 		</div>
 		)
 }

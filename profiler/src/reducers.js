@@ -1,5 +1,5 @@
 
-
+// profiel updater
 const initialProfile = {
         id: "",
         name:"",
@@ -21,6 +21,7 @@ export const updateProfile = (state=initialProfile, action={}) => {
   }
 }
 
+// zoekfunctie
 const initialSearchTerm = {
         search:""
         

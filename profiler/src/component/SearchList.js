@@ -7,8 +7,6 @@ import { requestProfile, setSearchField } from '../actions';
 const mapStateToProps = (state) => {
   
   return {
-    profile: state.updateProfile.profile,
-    authed: state.updateProfile.authed,
     search: state.getUser.search
   }
 }
@@ -16,8 +14,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     
   return {
-    // logIn: (event) => dispatch(setSearchField(event.target.value)),
-    Login: (email,password) => dispatch(requestProfile(email,password)),
     searchTerm: (text) => dispatch(setSearchField(text))
   }
 }
@@ -30,12 +26,13 @@ class SearchList extends React.Component {
 
   getUser = ()=>{
     //wanneer er een zoekterm is haal deze gebruiker op
-          if(this.props.search){
+      if(this.props.search){
             console.log("zoekterm",this.props.search)
        apiCall(`http://localhost:3003/users/${this.props.search}`)
        .then(data => this.setState({users:[data],userName: this.props.search}))
       .catch(err => console.log(err))
-    }else{
+     }
+     else{
       //geen zoekterm haal dan alle gebruikers op
        apiCall(`http://localhost:3003/users/all`)
        .then(data => this.setState({users:data}))
@@ -45,15 +42,12 @@ class SearchList extends React.Component {
 
 	componentDidMount(){
     this.setState({userName:this.props.search})
-   this.getUser()
+    setTimeout(e =>{this.getUser()},1000)
     }
     
 
   render(){
   	const list = this.state.users;
-    if(this.state.userName !== this.props.search){
-      this.getUser()
-    }
     
   return (
     <div>

@@ -9,7 +9,6 @@ const knex = require('knex');
 const register = require("./controller/register");
 const login = require("./controller/login");
 const users = require("./controller/users");
-const getUser = require("./controller/getUser");
 
 const database = knex({
 	client:APP_ENV,
@@ -21,7 +20,7 @@ const database = knex({
 	}
 });
 
-const whitelist = ['http://localhost:3001',"127.0.0.1"]
+const whitelist = ['http://localhost:3000',"127.0.0.1"]
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -31,6 +30,7 @@ const corsOptions = {
     }
   }
 }
+
 
 app.use(bodyParser.json());
 app.use(cors());

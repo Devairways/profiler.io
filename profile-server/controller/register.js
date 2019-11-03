@@ -22,6 +22,7 @@ const regHandler = (req,res,bcrypt,database)=>{
 				joined: new Date()
 			    })
 			.then(user =>{
+				setForeignkey(database,user[0])
 				res.json(user[0])
 			})
 		})
@@ -30,6 +31,18 @@ const regHandler = (req,res,bcrypt,database)=>{
 	})
 	.catch(err=>{
 		res.status(400).json('cannot register')
+	})
+}
+
+const setForeignkey = (database,user)=>{
+	database.transaction(trx =>{
+		trx.insert({
+			id: user.id
+		})
+		.into('links')
+		.then(trx.commit)
+		.catch(trx.rollback)
+
 	})
 }
 

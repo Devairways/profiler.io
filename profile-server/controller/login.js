@@ -33,7 +33,7 @@ const handleSignin = (db, bcrypt, req, res) => {
     .then(data => {
       const isValid = bcrypt.compareSync(password, data[0].hash);
       if (isValid) {
-        return db.select('*').from('users')
+        return db.select('*').from('users').innerJoin("links","users.link_id","links.id")
           .where('email', '=', email)
           .then(user => user[0])
           .catch(err => res.status(400).json('unable to get user'))

@@ -1,15 +1,26 @@
 
 
 const userHandler = (req,res,database)=>{
-	if (req.params.id !== "all"){
-		console.log("soekterm",req.params.id)
-		return database.select('*').from('users').innerJoin("links","users.link_id","links.id").where(function() {
-  this.where('users.id', req.params.id).orWhere('users.name', req.params.id)})
-			.then(user =>{console.log("soek",user)
-				res.json(user[0]);
-			})
+	const { id } = req.params;
+	console.log(id)
+	if (id !== "all" && isNaN(id)){
+		return database.select('*').from('users').leftJoin("links","users.link_id","links.id").where('users.name',id)
+			.then(user =>{
+					console.log("resp name",user)
+					res.json(user[0])
+				})
 			.catch(err=> res.status(400).json('cant collect userinfo'))
-	}else{
+	}else if (id !== "all") {
+		    let search = id.toString()
+            return database.select('*').from('users').leftJoin("links","users.link_id","links.id").where('users.id',id)
+			.then(user =>{
+					console.log("resp id",user)
+					res.json(user[0])
+				})
+			.catch(err=> res.status(400).json('cant collect userinfo'))
+	}
+
+	else{
 		return database.select('*').from('users')
 			.then(users =>{
 				res.json(users);
@@ -20,19 +31,44 @@ const userHandler = (req,res,database)=>{
 
 const userUpdateHandler = (req,res,database)=>{
   const { id } = req.params;
-  const { name, age } = req.body.formInput
-  database('users')
-  .where({ id })
-  .update({ name }) // nu kan je niet meer name gebruiken voor gegevensophalen inlogge!!!!1
-  .then(resp => {
-    if (resp) {
-      res.json("success")
-    } else {
-      res.status(400).json('Not found')
-    }
-  })
-  .catch(err => res.status(400).json('error updating user'))
+  console.log("inkomend",req.body.formInput)
+  const { name, age, about, location, link, gender } = req.body.formInput
 
+	database.transaction(trx =>{
+			trx.update({
+				name,
+				about,
+				age,
+				gender,
+				country:location,
+				link_id: id
+			})
+			.into('users').where("id",id)
+			.then(loginEmail =>{
+				setLinks(database,id,link)
+				return trx('users')
+				.returning('*').leftJoin("links","users.link_id","links.id")
+				.where("users.id",id)
+				.then(user =>{
+					console.log("uitgaand",user)
+					res.json(user[0])
+				})
+			})
+			.then(trx.commit)
+			.catch(trx.rollback)
+		})
+}
+
+const setLinks = (database,id,link)=>{
+	database.transaction(trx =>{
+		trx.update({
+			link:link
+		})
+		.into('links').where("id",id)
+		.then(trx.commit)
+		.catch(trx.rollback)
+
+	})
 }
 
 module.exports = {

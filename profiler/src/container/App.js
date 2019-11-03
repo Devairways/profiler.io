@@ -19,6 +19,7 @@ const mapStateToProps = (state) => {
   
   return {
     profile: state.updateProfile.profile,
+    error: state.updateProfile.error,
     authed: state.updateProfile.authed,
     token: state.updateProfile.token,
     pending: state.updateProfile.pending,
@@ -52,18 +53,18 @@ class App extends React.Component {
   }
 
    render() {
-    const { Login, profile, authed, search, token} = this.props;
+    const { Login, profile, authed, search, token, pending} = this.props;
     return (
         <div className="App">
         <Menu authed={authed}  login={Login}/>
           <Suspense fallback={<div><h3>Loading...</h3></div>}>
             <Route exact path="/" render={(props) => <h3>This is the main page</h3>} />
-            <Route path="/login" render={(props) => <LogIn {...props} Login={Login} authed={this.props.authed} />} />
-            <Route path="/register" render={(props) => <Register {...props} loadUser={this.loadUser} />}/>
+            <Route path="/login" render={(props) => <LogIn {...props} Login={Login} incorrect={this.props.error} pending={pending} authed={authed} />} />
+            <Route path="/register" render={(props) => <Register {...props} pending={pending} loadUser={this.loadUser} />}/>
             
             <PrivateRoute authed={authed} token={token} user={profile}  path='/profile' component={Profile} />
             <PrivateRoute authed={authed} path='/search' component={SearchList} />
-            <PrivateRoute authed={authed} user={search} path='/user' component={Profile} />
+            <PrivateRoute authed={authed} search={search} path='/user' component={Profile} />
             <PrivateRoute authed={authed} user={profile} path="/profileEdit" component={ProfileEdit} />
           </Suspense>
         </div>
