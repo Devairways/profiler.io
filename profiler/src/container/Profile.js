@@ -10,7 +10,7 @@ class Profile extends Component {
  }
 
  componentDidMount(){
- 	if (this.props.path == "/user"){
+ 	if (this.props.path === "/user"){
 		apiCall(`http://localhost:3003/users/${this.props.search}`)
 		.then(data =>{
 			this.setState({user:data})
@@ -27,7 +27,7 @@ saveAuthTokenInSessions = (token) => {
 render(){
 	let user = "";
 		//beslissing te nemen profiel data
-		if(this.props.path == "/profile"){
+		if(this.props.path === "/profile"){
 			user = this.props.user;
 			if(this.props.token){
 			this.saveAuthTokenInSessions(this.props.token)

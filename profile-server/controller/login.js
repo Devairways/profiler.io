@@ -33,7 +33,7 @@ const handleSignin = (db, bcrypt, req, res) => {
     .then(data => {
       const isValid = bcrypt.compareSync(password, data[0].hash);
       if (isValid) {
-        return db.select('*').from('users').innerJoin("links","users.link_id","links.id")
+        return db.select('*').from('users')
           .where('email', '=', email)
           .then(user => user[0])
           .catch(err => res.status(400).json('unable to get user'))
@@ -55,12 +55,14 @@ const getAuthTokenId = (req, res) => {
 }
 
 const signinAuthentication = (req, res, bcrypt,db) => {
+  console.log(req.body)
   const { authorization } = req.headers;
   return authorization ? getAuthTokenId(req, res)
     : handleSignin(db, bcrypt, req, res)
     .then(data =>
       data.id && data.email ? createSession(data) : Promise.reject(data))
-    .then(session => res.json(session))
+    .then(session => {console.log(session) 
+      res.json(session)})
     .catch(err => res.status(400).json(err));
 }
 

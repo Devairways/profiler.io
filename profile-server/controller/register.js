@@ -40,9 +40,16 @@ const setForeignkey = (database,user)=>{
 			id: user.id
 		})
 		.into('links')
+		.then(id =>{
+			return trx('users')
+			.returning('*')
+			.update({
+				link_id: user.id
+			    }).where('id',user.id)
 		.then(trx.commit)
 		.catch(trx.rollback)
 
+		})
 	})
 }
 

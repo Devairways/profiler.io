@@ -48,10 +48,10 @@ class SearchList extends React.Component {
 
   render(){
   	const list = this.state.users;
-    
+    console.log(list)
   return (
     <div>
-       {
+       { list[0] ? 
         list.map((user, i) => {
           return (
             <Card searchTerm={this.props.searchTerm}
@@ -61,7 +61,7 @@ class SearchList extends React.Component {
               email={list[i].email}
               />
           );
-        })
+        }) : <h3>geen gebruikers gevonden</h3>
       }
     </div>
   );

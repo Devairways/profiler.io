@@ -1,5 +1,5 @@
 export const apiCall = (link,req={}) =>{
-	
+	console.log("call",link, req)
 return(
   fetch(link,req)
   .then(response => {

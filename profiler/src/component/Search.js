@@ -45,10 +45,10 @@ class Search extends React.Component{
 	render(){
 	return (
 		<div>
-			<main>
-				<input type="text" className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" onChange={this.onChange} onKeyUp={this.keyCheck} name="name" placeholder="search Users..."/>
+			<main className="bg-light-red mw7 center pa4 br2-ns ba b--black-10 ">
+				<input type="text" className="" onChange={this.onChange} onKeyUp={this.keyCheck} name="name" placeholder="search Users..."/>
 				<Link to="/search">
-				<input type="submit" className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" onClick={this.onButtonSubmit} value="search"/>
+				<input type="submit" className="" onClick={this.onButtonSubmit} value="search"/>
 				</Link>
 			</main>
 			
